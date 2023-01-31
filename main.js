@@ -15,7 +15,6 @@ function windowListener() {
 }
 
 function renderText(text) {
-  let output = document.createElement("div");
+  let output = document.getElementById("output");
   output.innerText = text;
-  document.body.appendChild(output);
 }
