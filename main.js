@@ -44,7 +44,7 @@ function gyroListener() {
   let vy = 0.0;
   let updateRate = 1 / 60; // Sensor refresh rate
 
-  window.addEventListener("deviceorientation", (event) => {
+  window.addEventListener("devicemotion", (event) => {
     // Expose each orientation angle in a more readable way
     rotation_degrees = event.alpha;
     frontToBack_degrees = event.beta;
