@@ -76,5 +76,7 @@ function getAccel() {
       .catch((error) => {
         console.log(error);
       });
+  } else {
+    logParagraph.innerHTML("DeviceMotionEvent in window does not exist..");
   }
 }
