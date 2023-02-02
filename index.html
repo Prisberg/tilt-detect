@@ -14,10 +14,27 @@
         background-color: orange;
         font-size: 2rem;
     }
+
+    .indicatorDot {
+        width: 30px;
+        height: 30px;
+        background-color: aquamarine;
+        border-radius: 50%;
+        position: fixed;
+    }
+
+    .wrapper {
+        width: 100vw;
+        height: 100vh;
+    }
 </style>
 
 <body>
-    <p id="output"></p>
+    <div>
+        <p id="log"></p>
+    </div>
+    <div><button id="button" type="button">Click me</button></div>
+    <div class="wrapper"><span class="indicatorDot"></span></div>
 </body>
 
 </html>
