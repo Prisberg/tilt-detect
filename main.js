@@ -27,6 +27,7 @@ function getPermission() {
           logParagraph.innerHTML = error;
         });
     } else {
+      //
       logParagraph.innerHTML =
         "requestPermission in DeviceMotionEvent does not exist..";
       gyroListener();
@@ -61,13 +62,13 @@ function gyroListener() {
       vx = 0;
     }
 
-    py = py + vy * 0.5;
-    if (py > 98 || py < 0) {
-      py = Math.max(0, Math.min(98, py)); // Clip py between 0-98
-      vy = 0;
-    }
+    // py = py + vy * 0.5;
+    // if (py > 98 || py < 0) {
+    //   py = Math.max(0, Math.min(98, py)); // Clip py between 0-98
+    //   vy = 0;
+    // }
 
     dot = document.getElementsByClassName("indicatorDot")[0];
-    dot.setAttribute("style", "left:" + px + "%;" + "top:" + py + "%;");
+    dot.setAttribute("style", "left:" + px + "%;");
   });
 }
