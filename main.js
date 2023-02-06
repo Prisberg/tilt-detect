@@ -48,7 +48,7 @@ function gyroListener() {
   let vy = 0.0;
   let updateRate = 1 / 60; // Sensor refresh rate
 
-  window.addEventListener("devicemotion", (event) => {
+  window.addEventListener("deviceorientation", (event) => {
     // Expose each orientation angle in a more readable way
     rotation_degrees = event.alpha;
     beta = event.beta;
@@ -74,7 +74,7 @@ function gyroListener() {
     //   vy = 0;
     // }
 
-    dot = document.getElementsByClassName("indicatorDot")[0];
+    dot = document.getElementById("indicatorDot");
     dot.setAttribute("style", "left:" + px + "%;");
   });
 }
