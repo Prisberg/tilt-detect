@@ -1,4 +1,4 @@
-// NOTE: game must be hosted on HTTPS site to access DeviceMotion and getPermission in iOS.
+// NOTE: game must be hosted on HTTPS site to access DeviceMotion and requestPermission in iOS.
 
 window.onload = function () {
   const button = document.getElementById("button");
@@ -12,6 +12,7 @@ function getPermission() {
     logParagraph.innerHTML = "running getPermission";
     console.log("running getPermission");
 
+    // requestPermission does not exist on android or pc browsers
     if ("requestPermission" in DeviceMotionEvent) {
       logParagraph.innerHTML = "getPermission exists";
       console.log("getPermission exists");
@@ -27,7 +28,6 @@ function getPermission() {
           logParagraph.innerHTML = error;
         });
     } else {
-      //
       console.log("requestPermission in DeviceMotionEvent does not exist..");
       logParagraph.innerHTML =
         "requestPermission in DeviceMotionEvent does not exist..";
@@ -40,33 +40,33 @@ function getPermission() {
 }
 
 function gyroListener() {
-  let px = 50; // Position x and y
-  // let py = 50;
-  let vx = 0.0; // Velocity x and y
-  let vy = 0.0;
-  let updateRate = 1 / 60; // Sensor refresh rate
+  let posX = 50; // Position x
+  let velocityX = 0.0; // Velocity x
+  let updateRate = 1 / 500; // Sensor refresh rate
 
   window.addEventListener("deviceorientation", (event) => {
-    // Expose each orientation angle in a more readable way
-    rotation_degrees = event.alpha;
-    beta = event.beta;
-    gamma = event.gamma;
+    // gamma
+    gamma = Math.round(event.gamma);
     console.log(event);
-    logParagraph.innerHTML = `Tilt output: ${beta}, ${gamma}`;
 
     // Update velocity according to how tilted the phone is
     // Since phones are narrower than they are long, double the increase to the x velocity
-    vx = vx + gamma * updateRate * 2;
-    vy = vy + beta * updateRate;
+    velocityX = velocityX + gamma * updateRate * 3;
+    logParagraph.innerHTML = `velocityX output: ${velocityX}`;
 
     // Update position and clip it to bounds
-    px = px + vx * 0.5;
-    if (px > 98 || px < 0) {
-      px = Math.max(0, Math.min(98, px)); // Clip px between 0-98
-      vx = 0;
+    if (gamma > 5 || gamma < -5) {
+      // Update velocity if gamma is 10 degrees out of the 0 range
+      posX = posX + velocityX * 0.3;
+    } else {
+      velocityX = 0;
+    }
+    if (posX > 100 || posX < 0) {
+      posX = Math.max(0, Math.min(100, posX)); // Clip posX between 0-100
+      velocityX = 0;
     }
 
     dot = document.getElementById("indicatorDot");
-    dot.setAttribute("style", "left:" + px + "%;");
+    dot.setAttribute("style", "left:" + posX + "%;");
   });
 }
