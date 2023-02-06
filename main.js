@@ -3,7 +3,6 @@
 window.onload = function () {
   const button = document.getElementById("button");
   button.addEventListener("click", getPermission);
-  // DeviceOrientationFunc();
 };
 
 let logParagraph = document.getElementById("log");
@@ -19,8 +18,7 @@ function getPermission() {
       DeviceMotionEvent.requestPermission()
         .then((response) => {
           if (response == "granted") {
-            // Add a listener to get smartphone orientation
-            // in the alpha-beta-gamma axes (units in degrees)
+            // Add a listener to get smartphone orientation in the beta-gamma axis
             gyroListener();
           }
         })
@@ -68,27 +66,7 @@ function gyroListener() {
       vx = 0;
     }
 
-    // py = py + vy * 0.5;
-    // if (py > 98 || py < 0) {
-    //   py = Math.max(0, Math.min(98, py)); // Clip py between 0-98
-    //   vy = 0;
-    // }
-
     dot = document.getElementById("indicatorDot");
     dot.setAttribute("style", "left:" + px + "%;");
   });
 }
-
-// function DeviceOrientationFunc() {
-//   logParagraph.innerHTML = "running";
-//   if ("DeviceMotionEvent" in window) {
-//     window.addEventListener("devicemotion", function (event) {
-//       console.log(event);
-//       let beta = event.beta;
-//       let gamma = event.gamma;
-//       logParagraph.innerHTML = `Tilt output: ${beta}, ${gamma}`;
-//     });
-//   } else {
-//     logParagraph.innerHTML = `DeviceMotionEvent is not supported`;
-//   }
-// }
