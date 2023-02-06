@@ -1,6 +1,7 @@
 // NOTE: game must be hosted on HTTPS site to access DeviceMotion and requestPermission in iOS.
 
 window.onload = function () {
+  fpsMeter();
   const button = document.getElementById("button");
   button.addEventListener("click", getPermission);
 };
@@ -19,7 +20,7 @@ function getPermission() {
       DeviceMotionEvent.requestPermission()
         .then((response) => {
           if (response == "granted") {
-            // Add a listener to get smartphone orientation in the beta-gamma axis
+            // Add a listener to get device orientation in the gamma axis
             gyroListener();
           }
         })
@@ -42,31 +43,50 @@ function getPermission() {
 function gyroListener() {
   let posX = 50; // Position x
   let velocityX = 0.0; // Velocity x
-  let updateRate = 1 / 500; // Sensor refresh rate
+  let updateRate = 1 / 120; // Sensor refresh rate
+  const dot = document.getElementById("indicatorDot");
 
   window.addEventListener("deviceorientation", (event) => {
-    // gamma
-    gamma = Math.round(event.gamma);
     console.log(event);
+    // gamma = Degrees per second around the y axis
+    gamma = event.gamma;
 
-    // Update velocity according to how tilted the phone is
-    // Since phones are narrower than they are long, double the increase to the x velocity
-    velocityX = velocityX + gamma * updateRate * 3;
-    logParagraph.innerHTML = `velocityX output: ${velocityX}`;
-
-    // Update position and clip it to bounds
+    // Update position if gamma is 10 degrees out of the 0 range
     if (gamma > 5 || gamma < -5) {
-      // Update velocity if gamma is 10 degrees out of the 0 range
-      posX = posX + velocityX * 0.3;
+      velocityX = velocityX + gamma * updateRate;
+      logParagraph.innerHTML = `velocityX output: ${velocityX}`;
+
+      // Update position and clip it to bounds
+      posX = posX + velocityX * 0.5;
     } else {
       velocityX = 0;
     }
     if (posX > 100 || posX < 0) {
-      posX = Math.max(0, Math.min(100, posX)); // Clip posX between 0-100
+      // Clip posX between 0-100
+      posX = Math.max(0, Math.min(100, posX));
       velocityX = 0;
     }
 
-    dot = document.getElementById("indicatorDot");
-    dot.setAttribute("style", "left:" + posX + "%;");
+    dot.setAttribute("style", `left: ${posX}%;`);
+  });
+}
+
+function fpsMeter() {
+  let fpsParagraph = document.getElementById("fps");
+  let prevTime = Date.now(),
+    frames = 0;
+
+  requestAnimationFrame(function loop() {
+    const time = Date.now();
+    frames++;
+    if (time > prevTime + 1000) {
+      let fps = Math.round((frames * 1000) / (time - prevTime));
+      prevTime = time;
+      frames = 0;
+
+      fpsParagraph.innerHTML = `FPS: ${fps}`;
+    }
+
+    requestAnimationFrame(loop);
   });
 }
